@@ -1,0 +1,22 @@
+{
+  "name": "papyrio-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for the Papyrio PDF API: compress, convert, merge, split and OCR PDFs from an assistant.",
+  "license": "MIT",
+  "type": "module",
+  "bin": { "papyrio-mcp": "dist/index.js" },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  }
+}

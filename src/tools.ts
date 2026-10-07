@@ -70,7 +70,93 @@ export const TOOLS: Tool[] = [
     fields: [{ kind: "input_file", name: "file", description: "Absolute path to the scanned PDF." }],
     outputExtension: ".pdf",
   },
-  // The remaining eight endpoints from Server/openapi.yaml slot in here with
-  // no other change: /split-pdf, /pdf-to-jpg, /convert, /image-to-pdf,
-  // /html-to-pdf, /protect-pdf, /unlock-pdf, /pdf-to-word.
+  {
+    name: "pdf_to_word",
+    path: "/pdf-to-word",
+    description:
+      "Convert a PDF into an editable Word document. PDFs exported from Word, Google Docs or InDesign come through well. A scanned PDF is a picture of a page, so run ocr_pdf on it first.",
+    fields: [{ kind: "input_file", name: "file", description: "Absolute path to the PDF." }],
+    outputExtension: ".docx",
+  },
+  {
+    name: "split_pdf",
+    path: "/split-pdf",
+    description:
+      "Separate every page of a PDF into its own file, returned as a ZIP archive. Use this to pull single pages out of a long document.",
+    fields: [{ kind: "input_file", name: "file", description: "Absolute path to the PDF to split." }],
+    outputExtension: ".zip",
+  },
+  {
+    name: "pdf_to_jpg",
+    path: "/pdf-to-jpg",
+    description:
+      "Render every page of a PDF as a JPG image, returned as a ZIP archive. Use this when the pages are needed as pictures, for a thumbnail, a slide or an image pipeline.",
+    fields: [{ kind: "input_file", name: "file", description: "Absolute path to the PDF." }],
+    outputExtension: ".zip",
+  },
+  {
+    name: "office_to_pdf",
+    path: "/convert",
+    description:
+      "Convert a Word (.doc, .docx, .odt), PowerPoint (.ppt, .pptx) or Excel (.xls, .xlsx) document to PDF, keeping fonts, tables, images and page layout. Use this to turn an Office file into something fixed and shareable.",
+    fields: [
+      { kind: "input_file", name: "file", description: "Absolute path to the Office document." },
+    ],
+    outputExtension: ".pdf",
+  },
+  {
+    name: "image_to_pdf",
+    path: "/image-to-pdf",
+    description:
+      "Wrap a JPG, PNG or WebP image in a PDF page. Use this when an image needs to be submitted or printed as a PDF.",
+    fields: [{ kind: "input_file", name: "file", description: "Absolute path to the image." }],
+    outputExtension: ".pdf",
+  },
+  {
+    name: "webpage_to_pdf",
+    path: "/html-to-pdf",
+    description:
+      "Fetch a public URL and render the page to PDF in a headless browser. Use this to archive or print a web page. This tool takes a URL rather than a file, so output_path is required.",
+    fields: [
+      {
+        kind: "text",
+        name: "url",
+        description: "Publicly reachable page URL, including https://.",
+        required: true,
+      },
+    ],
+    outputExtension: ".pdf",
+  },
+  {
+    name: "protect_pdf",
+    path: "/protect-pdf",
+    description:
+      "Encrypt a PDF with AES-256 so it cannot be opened without the password. Use this before sending a document that contains anything private.",
+    fields: [
+      { kind: "input_file", name: "file", description: "Absolute path to the PDF to encrypt." },
+      {
+        kind: "text",
+        name: "password",
+        description: "Password that will be required to open the resulting PDF.",
+        required: true,
+      },
+    ],
+    outputExtension: ".pdf",
+  },
+  {
+    name: "unlock_pdf",
+    path: "/unlock-pdf",
+    description:
+      "Remove the password from a PDF you already know the password for. This decrypts with the supplied password; it does not break or guess encryption.",
+    fields: [
+      { kind: "input_file", name: "file", description: "Absolute path to the password-protected PDF." },
+      {
+        kind: "text",
+        name: "password",
+        description: "The PDF's current password.",
+        required: true,
+      },
+    ],
+    outputExtension: ".pdf",
+  },
 ];

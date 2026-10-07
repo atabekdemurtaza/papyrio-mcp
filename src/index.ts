@@ -32,6 +32,10 @@ const BASE = API_KEY ? `https://${GATEWAY_HOST}` : ORIGIN;
 /** OCR and large Office conversions are the slowest operations. */
 const TIMEOUT_MS = 180_000;
 
+function takesAFile(tool: Tool): boolean {
+  return tool.fields.some((f) => f.kind === "input_file" || f.kind === "input_files");
+}
+
 function inputSchema(tool: Tool) {
   const properties: Record<string, unknown> = {};
   const required: string[] = [];
@@ -64,10 +68,20 @@ function inputSchema(tool: Tool) {
     if (field.required) required.push(field.name);
   }
 
-  properties.output_path = {
-    type: "string",
-    description: `Absolute path to write the result to. Defaults to the input file with a "-papyrio${tool.outputExtension}" suffix.`,
-  };
+  // Tools with no file input have nothing to derive an output name from, so
+  // the path has to be supplied rather than guessed.
+  if (takesAFile(tool)) {
+    properties.output_path = {
+      type: "string",
+      description: `Absolute path to write the result to. Defaults to the input file with a "-papyrio${tool.outputExtension}" suffix.`,
+    };
+  } else {
+    properties.output_path = {
+      type: "string",
+      description: `Absolute path to write the ${tool.outputExtension} result to. Required for this tool.`,
+    };
+    required.push("output_path");
+  }
 
   return { type: "object", properties, required };
 }
@@ -141,6 +155,12 @@ async function run(tool: Tool, args: Record<string, unknown>) {
 
   if (!response.ok) {
     throw new Error(await explainFailure(response));
+  }
+
+  if (!args.output_path && !firstInput) {
+    throw new Error(
+      `${tool.name} takes no input file, so output_path is required: an absolute path ending in ${tool.outputExtension}.`
+    );
   }
 
   const outputPath = args.output_path

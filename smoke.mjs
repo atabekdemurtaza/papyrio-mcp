@@ -25,6 +25,75 @@ await writeFile(PNG, Buffer.from(
   "base64"
 ));
 
+// Smallest .docx LibreOffice will open: three parts in a zip.
+const DOCX = join(out, "sample.docx");
+{
+  const parts = [
+    ["[Content_Types].xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>`],
+    ["_rels/.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`],
+    ["word/document.xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body><w:p><w:r><w:t>Papyrio smoke test.</w:t></w:r></w:p></w:body></w:document>`],
+  ];
+  await writeFile(DOCX, buildZip(parts));
+}
+
+/** Stored-mode zip, so no compression dependency is needed. */
+function buildZip(parts) {
+  const crcTable = Array.from({ length: 256 }, (_, n) => {
+    let c = n;
+    for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+    return c >>> 0;
+  });
+  const crc32 = (buf) => {
+    let c = 0xffffffff;
+    for (const byte of buf) c = crcTable[(c ^ byte) & 0xff] ^ (c >>> 8);
+    return (c ^ 0xffffffff) >>> 0;
+  };
+
+  const locals = [];
+  const centrals = [];
+  let offset = 0;
+
+  for (const [name, text] of parts) {
+    const nameBuf = Buffer.from(name, "utf8");
+    const data = Buffer.from(text, "utf8");
+    const crc = crc32(data);
+
+    const local = Buffer.alloc(30 + nameBuf.length);
+    local.writeUInt32LE(0x04034b50, 0);
+    local.writeUInt16LE(20, 4);
+    local.writeUInt32LE(crc, 14);
+    local.writeUInt32LE(data.length, 18);
+    local.writeUInt32LE(data.length, 22);
+    local.writeUInt16LE(nameBuf.length, 26);
+    nameBuf.copy(local, 30);
+    locals.push(local, data);
+
+    const central = Buffer.alloc(46 + nameBuf.length);
+    central.writeUInt32LE(0x02014b50, 0);
+    central.writeUInt16LE(20, 4);
+    central.writeUInt16LE(20, 6);
+    central.writeUInt32LE(crc, 16);
+    central.writeUInt32LE(data.length, 20);
+    central.writeUInt32LE(data.length, 24);
+    central.writeUInt16LE(nameBuf.length, 28);
+    central.writeUInt32LE(offset, 42);
+    nameBuf.copy(central, 46);
+    centrals.push(central);
+
+    offset += local.length + data.length;
+  }
+
+  const centralBuf = Buffer.concat(centrals);
+  const end = Buffer.alloc(22);
+  end.writeUInt32LE(0x06054b50, 0);
+  end.writeUInt16LE(parts.length, 8);
+  end.writeUInt16LE(parts.length, 10);
+  end.writeUInt32LE(centralBuf.length, 12);
+  end.writeUInt32LE(offset, 16);
+
+  return Buffer.concat([...locals, centralBuf, end]);
+}
+
 const server = spawn("node", ["dist/index.js"], {
   stdio: ["pipe", "pipe", "inherit"],
   env: process.env,
@@ -65,26 +134,30 @@ async function kindOf(path) {
   return "other";
 }
 
+// The extension matters: the API validates the uploaded filename, so writing
+// everything as .bin makes a chained call (unlock after protect) fail with
+// "only PDF files are accepted" even though both endpoints work.
 const cases = [
-  ["compress_pdf",     { file: PDF, level: "high" },                          "pdf"],
-  ["merge_pdfs",       { files: [PDF, PDF] },                                 "pdf"],
-  ["extract_pdf_text", { file: PDF },                                         "other"],
-  ["ocr_pdf",          { file: PDF },                                         "pdf"],
-  ["pdf_to_word",      { file: PDF },                                         "zip-or-docx"],
-  ["split_pdf",        { file: PDF },                                         "zip-or-docx"],
-  ["pdf_to_jpg",       { file: PDF },                                         "zip-or-docx"],
-  ["image_to_pdf",     { file: PNG },                                         "pdf"],
-  ["webpage_to_pdf",   { url: "https://example.com" },                        "pdf"],
-  ["protect_pdf",      { file: PDF, password: "smoke-test-123" },             "pdf"],
-  ["unlock_pdf",       { file: null, password: "smoke-test-123" },            "pdf"],
+  ["compress_pdf",     { file: PDF, level: "high" },               ".pdf",  "pdf"],
+  ["merge_pdfs",       { files: [PDF, PDF] },                      ".pdf",  "pdf"],
+  ["extract_pdf_text", { file: PDF },                              ".txt",  "other"],
+  ["ocr_pdf",          { file: PDF },                              ".pdf",  "pdf"],
+  ["pdf_to_word",      { file: PDF },                              ".docx", "zip-or-docx"],
+  ["split_pdf",        { file: PDF },                              ".zip",  "zip-or-docx"],
+  ["pdf_to_jpg",       { file: PDF },                              ".zip",  "zip-or-docx"],
+  ["office_to_pdf",    { file: DOCX },                             ".pdf",  "pdf"],
+  ["image_to_pdf",     { file: PNG },                              ".pdf",  "pdf"],
+  ["webpage_to_pdf",   { url: "https://example.com" },             ".pdf",  "pdf"],
+  ["protect_pdf",      { file: PDF, password: "smoke-test-123" },  ".pdf",  "pdf"],
+  ["unlock_pdf",       { file: null, password: "smoke-test-123" }, ".pdf",  "pdf"],
 ];
 
 let passed = 0;
 let failed = 0;
 let lockedPath = "";
 
-for (const [name, args, expected] of cases) {
-  const outputPath = join(out, `${name}${name === "extract_pdf_text" ? ".txt" : ".bin"}`);
+for (const [name, args, extension, expected] of cases) {
+  const outputPath = join(out, `${name}${extension}`);
 
   // unlock_pdf consumes whatever protect_pdf produced.
   if (name === "unlock_pdf") {

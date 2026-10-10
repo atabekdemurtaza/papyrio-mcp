@@ -80,8 +80,6 @@ input file to derive a name from and so requires it.
 Add an entry to `src/tools.ts`. The MCP tool, its input schema and the HTTP
 call are all generated from it.
 
-it.
-
 ## Testing
 
 ```bash

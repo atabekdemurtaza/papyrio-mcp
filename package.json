@@ -3,9 +3,32 @@
   "version": "0.1.0",
   "description": "MCP server for the Papyrio PDF API: compress, convert, merge, split and OCR PDFs from an assistant.",
   "license": "MIT",
+  "homepage": "https://papyrio.net/docs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atabekdemurtaza/papyrio-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/atabekdemurtaza/papyrio-mcp/issues"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "mcp-server",
+    "pdf",
+    "ocr",
+    "pdf-compression",
+    "pdf-conversion",
+    "claude",
+    "ai-agent"
+  ],
   "type": "module",
-  "bin": { "papyrio-mcp": "dist/index.js" },
-  "files": ["dist"],
+  "bin": {
+    "papyrio-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",

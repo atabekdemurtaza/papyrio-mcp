@@ -1,6 +1,7 @@
 {
   "name": "papyrio-mcp",
-  "version": "0.1.1",
+  "version": "0.1.2",
+  "mcpName": "io.github.atabekdemurtaza/papyrio-mcp",
   "description": "MCP server for the Papyrio PDF API: compress, convert, merge, split and OCR PDFs from an assistant.",
   "license": "MIT",
   "homepage": "https://papyrio.net/docs",

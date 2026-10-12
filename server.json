@@ -1,0 +1,31 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.atabekdemurtaza/papyrio-mcp",
+  "title": "Papyrio PDF Tools",
+  "description": "Compress, convert, merge, split and OCR PDFs on your own machine. Reads and writes local files, so an assistant can chain operations without uploading and downloading between every step.",
+  "websiteUrl": "https://papyrio.net/docs",
+  "repository": {
+    "url": "https://github.com/atabekdemurtaza/papyrio-mcp",
+    "source": "github"
+  },
+  "version": "0.1.2",
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "papyrio-mcp",
+      "version": "0.1.2",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "PAPYRIO_API_KEY",
+          "description": "RapidAPI subscription key. Without one the server runs on the free guest tier, which allows three operations a day per IP address.",
+          "isRequired": false,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

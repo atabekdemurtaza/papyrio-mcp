@@ -3,7 +3,7 @@
   "name": "io.github.atabekdemurtaza/papyrio-mcp",
   "title": "Papyrio PDF Tools",
   "description": "Compress, convert, merge, split and OCR PDFs from an assistant, using local files.",
-  "websiteUrl": "https://papyrio.net/docs",
+  "websiteUrl": "https://papyrio.net/mcp",
   "repository": {
     "url": "https://github.com/atabekdemurtaza/papyrio-mcp",
     "source": "github"

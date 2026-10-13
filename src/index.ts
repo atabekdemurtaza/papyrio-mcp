@@ -27,7 +27,7 @@ import { TOOLS, type Field, type Tool } from "./tools.js";
 // Kept in step with package.json by hand. The handshake reports it, and some
 // registry listings display it, so a stale literal here looks like a stale
 // package.
-const VERSION = "0.1.2";
+const VERSION = "0.1.3";
 
 const API_KEY = process.env.PAPYRIO_API_KEY ?? "";
 const GATEWAY_HOST = "papyrio-pdf-tools.p.rapidapi.com";

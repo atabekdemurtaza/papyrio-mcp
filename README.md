@@ -3,7 +3,7 @@
 [![npm](https://img.shields.io/npm/v/papyrio-mcp)](https://www.npmjs.com/package/papyrio-mcp)
 [![Listed on mcpservers.org](https://mcpservers.org/badge.svg)](https://mcpservers.org/servers/atabekdemurtaza/papyrio-mcp)
 
-An MCP server for the [Papyrio](https://papyrio.net) PDF API. It lets an
+An MCP server for the [Papyrio](https://papyrio.net) PDF API. Setup for Claude, Cursor and VS Code: [papyrio.net/mcp](https://papyrio.net/mcp). It lets an
 assistant compress, merge, OCR and convert PDFs on your own machine, reading
 and writing local files, so multi-step work does not mean uploading and
 downloading between every step.

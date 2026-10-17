@@ -16,6 +16,15 @@ is four tool calls the assistant makes by itself.
 
 ## Install
 
+### Claude Desktop, one click
+
+[Download papyrio-mcp.mcpb](https://github.com/atabekdemurtaza/papyrio-mcp/releases/latest/download/papyrio-mcp.mcpb)
+and double-click it. Claude Desktop opens an install screen; leave the API key
+empty for the free guest tier or paste a RapidAPI key (see below). You can
+change it later under Settings, Extensions.
+
+### By hand, or any other client
+
 Add this to your Claude Desktop config:
 
 **macOS** `~/Library/Application Support/Claude/claude_desktop_config.json`

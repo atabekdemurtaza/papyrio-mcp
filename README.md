@@ -2,6 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/papyrio-mcp)](https://www.npmjs.com/package/papyrio-mcp)
 [![Listed on mcpservers.org](https://mcpservers.org/badge.svg)](https://mcpservers.org/servers/atabekdemurtaza/papyrio-mcp)
+[![Glama score](https://glama.ai/mcp/servers/atabekdemurtaza/papyrio-mcp/badges/score.svg)](https://glama.ai/mcp/servers/atabekdemurtaza/papyrio-mcp)
 
 An MCP server for the [Papyrio](https://papyrio.net) PDF API. Setup for Claude, Cursor and VS Code: [papyrio.net/mcp](https://papyrio.net/mcp). It lets an
 assistant compress, merge, OCR and convert PDFs on your own machine, reading

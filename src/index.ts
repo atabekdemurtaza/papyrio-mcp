@@ -27,7 +27,7 @@ import { TOOLS, type Field, type Tool } from "./tools.js";
 // Kept in step with package.json by hand. The handshake reports it, and some
 // registry listings display it, so a stale literal here looks like a stale
 // package.
-const VERSION = "0.1.3";
+const VERSION = "0.1.4";
 
 const API_KEY = process.env.PAPYRIO_API_KEY ?? "";
 const GATEWAY_HOST = "papyrio-pdf-tools.p.rapidapi.com";
@@ -208,10 +208,17 @@ const server = new Server(
   { capabilities: { tools: {} } }
 );
 
+/**
+ * Appended to every tool description: what any call does besides its own job.
+ * Assistants pick tools on these descriptions, so side effects belong in them.
+ */
+const SHARED_BEHAVIOR =
+  "The input is uploaded to the Papyrio API, processed in memory and not stored. The result is written to output_path, replacing any file already there, and the call returns that path and the size in bytes. Inputs are limited to 50 MB, and each call counts as one operation against the daily quota.";
+
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
   tools: TOOLS.map((tool) => ({
     name: tool.name,
-    description: tool.description,
+    description: `${tool.description} ${SHARED_BEHAVIOR}`,
     inputSchema: inputSchema(tool),
   })),
 }));

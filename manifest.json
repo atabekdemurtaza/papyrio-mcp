@@ -2,7 +2,7 @@
   "manifest_version": "0.2",
   "name": "papyrio-mcp",
   "display_name": "Papyrio PDF Tools",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Compress, merge, split, OCR and convert PDFs on local files through the Papyrio API.",
   "long_description": "Gives the assistant twelve PDF tools that read and write files on your machine: compress, merge, split, extract text, OCR, convert PDF to Word or JPG, convert Office files, images and webpages to PDF, and password protect or unlock. Files are sent to the Papyrio API, processed in memory and discarded after the response. Without an API key the server runs on the free guest tier of three operations a day per IP address; a RapidAPI key raises the limit.",
   "author": {
@@ -45,7 +45,7 @@
     { "name": "extract_pdf_text", "description": "Return the text layer as UTF-8" },
     { "name": "pdf_to_word", "description": "Rebuild the document as an editable .docx" },
     { "name": "pdf_to_jpg", "description": "Render every page as a JPG" },
-    { "name": "ocr_pdf", "description": "Add a searchable text layer to a scan" },
+    { "name": "ocr_pdf", "description": "Add a searchable text layer to a scan, in 7 languages" },
     { "name": "office_to_pdf", "description": "Convert Word, PowerPoint or Excel to PDF" },
     { "name": "image_to_pdf", "description": "Wrap a JPG, PNG or WebP in a PDF page" },
     { "name": "webpage_to_pdf", "description": "Render a public URL in a headless browser" },

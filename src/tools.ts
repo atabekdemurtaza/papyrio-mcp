@@ -66,8 +66,18 @@ export const TOOLS: Tool[] = [
     name: "ocr_pdf",
     path: "/ocr-pdf",
     description:
-      "Add a searchable text layer to a scanned PDF, making it selectable and searchable. Use this before extracting text from a scan or a photographed document. Scans at 300 DPI or higher read well; below 150 DPI the result degrades badly.",
-    fields: [{ kind: "input_file", name: "file", description: "Absolute path to the scanned PDF." }],
+      "Add an invisible text layer to a scanned PDF so its text can be searched, selected and extracted. Use this before extract_pdf_text or pdf_to_word on a scan or photographed document, and set lang when the text is not English. The page images are kept, so the output is about the same size as the input, and pages that already have text are left untouched. Takes roughly 2-10 seconds per page. Scans at 300 DPI or higher read well; below 150 DPI accuracy degrades badly.",
+    fields: [
+      { kind: "input_file", name: "file", description: "Absolute path to the scanned PDF." },
+      {
+        kind: "text",
+        name: "lang",
+        description:
+          "Language of the document's text as a Tesseract code: eng (English), rus (Russian), spa (Spanish), ita (Italian), uzb (Uzbek, Latin script), uzb_cyrl (Uzbek, Cyrillic) or kaz (Kazakh). For mixed documents join two with '+', for example rus+eng. Any other value is rejected. Defaults to eng.",
+        required: false,
+        default: "eng",
+      },
+    ],
     outputExtension: ".pdf",
   },
   {
@@ -98,9 +108,13 @@ export const TOOLS: Tool[] = [
     name: "office_to_pdf",
     path: "/convert",
     description:
-      "Convert a Word (.doc, .docx, .odt), PowerPoint (.ppt, .pptx) or Excel (.xls, .xlsx) document to PDF, keeping fonts, tables, images and page layout. Use this to turn an Office file into something fixed and shareable.",
+      "Convert a Word (.doc, .docx, .odt), PowerPoint (.ppt, .pptx) or Excel (.xls, .xlsx) document to PDF with LibreOffice, keeping fonts, tables, images and page layout; each slide or sheet becomes one or more pages. Use this to turn an Office file into a fixed, shareable PDF, not for files that are already PDFs. Large presentations can take 30 seconds or more. Password-protected Office files are not supported.",
     fields: [
-      { kind: "input_file", name: "file", description: "Absolute path to the Office document." },
+      {
+        kind: "input_file",
+        name: "file",
+        description: "Absolute path to the Office document. The extension decides how it is read, so it must be one of .doc, .docx, .odt, .ppt, .pptx, .xls or .xlsx.",
+      },
     ],
     outputExtension: ".pdf",
   },

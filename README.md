@@ -77,7 +77,7 @@ The free RapidAPI tier is 50 requests a month and needs no card.
 | `extract_pdf_text` | Returns the text layer as UTF-8 | `.txt` |
 | `pdf_to_word` | Rebuilds the document as an editable .docx | `.docx` |
 | `pdf_to_jpg` | Renders every page as a JPG | `.zip` |
-| `ocr_pdf` | Adds a searchable text layer to a scan | `.pdf` |
+| `ocr_pdf` | Adds a searchable text layer to a scan; `lang` picks English, Russian, Spanish, Italian, Uzbek or Kazakh | `.pdf` |
 | `office_to_pdf` | Word, PowerPoint or Excel to PDF | `.pdf` |
 | `image_to_pdf` | Wraps a JPG, PNG or WebP in a PDF page | `.pdf` |
 | `webpage_to_pdf` | Renders a public URL in a headless browser | `.pdf` |

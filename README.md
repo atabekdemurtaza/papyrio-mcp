@@ -19,6 +19,8 @@ is four tool calls the assistant makes by itself.
 
 ### Claude Desktop, one click
 
+[![Watch: add PDF tools to Claude Desktop in one click (47 s)](https://i.ytimg.com/vi/xZvKMRmMlSk/maxresdefault.jpg)](https://www.youtube.com/watch?v=xZvKMRmMlSk)
+
 [Download papyrio-mcp.mcpb](https://github.com/atabekdemurtaza/papyrio-mcp/releases/latest/download/papyrio-mcp.mcpb)
 and double-click it. Claude Desktop opens an install screen; leave the API key
 empty for the free guest tier or paste a RapidAPI key (see below). You can

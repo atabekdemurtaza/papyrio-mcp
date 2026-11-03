@@ -66,7 +66,7 @@ export const TOOLS: Tool[] = [
     name: "ocr_pdf",
     path: "/ocr-pdf",
     description:
-      "Add an invisible text layer to a scanned PDF so its text can be searched, selected and extracted. Use this before extract_pdf_text or pdf_to_word on a scan or photographed document, and set lang when the text is not English. The page images are kept, so the output is about the same size as the input, and pages that already have text are left untouched. Takes roughly 2-10 seconds per page. Scans at 300 DPI or higher read well; below 150 DPI accuracy degrades badly.",
+      "Add an invisible text layer to a scanned PDF so its text can be searched, selected and extracted. Use this before extract_pdf_text or pdf_to_word on a scan or photographed document, and set lang when the text is not English. The page images are kept, so the output is about the same size as the input, and pages that already have text are left untouched. Accepts up to 15 pages per call and takes about 5 seconds per page; for a longer scan, run split_pdf first, OCR the parts, then merge_pdfs. Scans at 300 DPI or higher read well; below 150 DPI accuracy degrades badly.",
     fields: [
       { kind: "input_file", name: "file", description: "Absolute path to the scanned PDF." },
       {
